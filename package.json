@@ -1,0 +1,10 @@
+{
+  "name": "rowheadermatchcsv",
+  "version": "1.0.0",
+  "description": "Match rows and headers for BOM CSV formats",
+  "main": "index.js",
+  "repository": "https://github.com/scottsloane/rowheadermatchcsv",
+  "author": "Scott Sloane (scott@scottsloane.com)",
+  "license": "MIT",
+  "private": false
+}
