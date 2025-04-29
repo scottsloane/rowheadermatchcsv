@@ -34,16 +34,16 @@ csv.addColumn('col2', 'anotherdescription');
 
 4. Add row data
 ```javascript
-csv.addRow('row1', 'description');
-csv.addRow('row2', 'anotherdescription');
+let row1 = csv.addRow('row1', 'description');
+let row2 = csv.addRow('row2', 'anotherdescription');
 ```
 
 5. Link rows to columns
 ```javascript
-csv.linkRowToColumn('row1', 'col1', 'somevalue');
-csv.linkRowToColumn('row1', 'col2', 'someothervalue');
-csv.linkRowToColumn('row2', 'col1', 'adifferentvalue');
-csv.linkRowToColumn('row2', 'col2', '');
+csv.linkRowToColumn(row1, 'col1', 'somevalue');
+csv.linkRowToColumn(row1, 'col2', 'someothervalue');
+csv.linkRowToColumn(row2, 'col1', 'adifferentvalue');
+csv.linkRowToColumn(row2, 'col2', '');
 ```
 
 6. Write the CSV to disk

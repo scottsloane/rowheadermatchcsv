@@ -32,8 +32,19 @@ export default class RowHeaderMatchCSV {
         return this.columns[column.id] !== undefined;
     }
 
-    addRow(id, subheader) {
-        this.rows[id] = { subheader, columns: {} };
+    addRow(name, subheader) {
+        if(!name || !subheader) {
+            throw new Error(`Name and subheader are required`);
+        }
+        const id = `${name}::${subheader}`;
+        if(this.rows[id]) {
+            if(this.rows[id].subheader !== subheader) {
+                throw new Error(`Row ${id} already exists with subheader ${this.rows[id].subheader} but trying to add with subheader ${subheader}`);
+            }
+            return id;
+        }
+        this.rows[id] = { name, subheader, columns: {} };
+        return id;
     }
 
     linkRowToColumn(row, column, data) {
@@ -41,6 +52,9 @@ export default class RowHeaderMatchCSV {
     }
 
     addColumn(id, subheader) {
+        if(this.columns[id]) {
+            return;
+        }
         this.columns[id] = subheader;
     }
 
@@ -75,7 +89,7 @@ export default class RowHeaderMatchCSV {
             }
 
             for (let row of rows) {
-                let line = `"${row.id.replace(/"/g, '""')}","${row.subheader.replace(/"/g, '""')}"`
+                let line = `"${row.name.replace(/"/g, '""')}","${row.subheader.replace(/"/g, '""')}",`
                     + columns.map(x => `"${row.columns[x] || ''}"`).join(',');
                 csv += `${line}\n`;
             }
