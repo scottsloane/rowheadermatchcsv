@@ -31,7 +31,7 @@ export default class RowHeaderMatchCSV {
         return this.rows[row.id] !== undefined;
     }
 
-    hasColumn(id, subheader) {
+    hasColumn(column) {
         return this.columns[column.id] !== undefined;
     }
 
