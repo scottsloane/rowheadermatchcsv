@@ -55,13 +55,13 @@ csv.writeCSV('./csv/', 'myfilename');
 
 ### maxRows
 
-This is the maximum number of rows a file can have
+This is the maximum number of columns a file can have
 
 ### usage
 
 ```javascript
 const csv = new RowHeaderMatchCSV({
-    maxRows: 25
+    maxColumns: 25
 })
 ```
 

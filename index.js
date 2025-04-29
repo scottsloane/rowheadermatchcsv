@@ -5,11 +5,8 @@ export default class RowHeaderMatchCSV {
         this.columns = {};
         this.rows = {};
         if (options) {
-            if (options.maxRows) {
-                this.maxRows = options.maxRows;
-            }
-            if (options.maxRows) {
-                this.maxRows = options.maxRows;
+            if (options.maxColumns) {
+                this.maxColumns = options.maxColumns;
             }
         }
     }
@@ -49,26 +46,42 @@ export default class RowHeaderMatchCSV {
 
     // If maxModels is set, break the csv into multiple files
     writeCSV(path, filename) {
-        if(!existsSync(path)) {
+        if (!existsSync(path)) {
             mkdirSync(path, { recursive: true });
         }
 
-        const maxRows = this.maxRows || this.rowCount();
+        const maxColumns = this.maxColumns || this.columnCount();
 
-        for(let i = 0; i < this.rowCount(); i += maxRows) {
+        let i = 0;
+        while (i * maxColumns < this.columnCount()) {
+            const columns = Object.keys(this.columns).slice(i * maxColumns, (i + 1) * maxColumns);
+            const subheaders = Object.values(this.columns).slice(i * maxColumns, (i + 1) * maxColumns);
+
+
             let csv = '"","",' +
-                Object.keys(this.columns).map(x => `"${x.replace(/"/g, '""')}"`) +
-            '\n"","",' +
-            Object.values(this.columns).map(x => `"${x.replace(/"/g, '""')}"`).join(',') +
-            '\n';
-        for (let key of Object.keys(this.rows)) {
-            let row = this.rows[key];
+                columns.map(x => `"${x.replace(/"/g, '""')}"`).join(',') +
+                '\n"","",' +
+                subheaders.map(x => `"${x.replace(/"/g, '""')}"`).join(',') +
+                '\n';
 
-            let line = `"${key.replace(/"/g, '""')}","${row.subheader.replace(/"/g, '""')}"`
-                + Object.keys(this.columns).map(x => `"${row.columns[x] || ''}"`).join(',');
-            csv += `${line}\n`;
+            let rows = [];
+            for (let [id, row] of Object.entries(this.rows)) {
+                for (let column of columns) {
+                    if (row.columns[column]) {
+                        rows.push({ id, ...row });
+                        break;
+                    }
+                }
             }
+
+            for (let row of rows) {
+                let line = `"${row.id.replace(/"/g, '""')}","${row.subheader.replace(/"/g, '""')}"`
+                    + columns.map(x => `"${row.columns[x] || ''}"`).join(',');
+                csv += `${line}\n`;
+            }
+
             writeFileSync(`${path}${filename}-${i}.csv`, csv);
+            i++;
         }
     }
 
