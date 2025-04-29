@@ -5,11 +5,11 @@ export default class RowHeaderMatchCSV {
         this.columns = {};
         this.rows = {};
         if (options) {
-            if (options.minModels) {
-                this.minModels = options.minModels;
+            if (options.maxRows) {
+                this.maxRows = options.maxRows;
             }
-            if (options.maxModels) {
-                this.maxModels = options.maxModels;
+            if (options.maxRows) {
+                this.maxRows = options.maxRows;
             }
         }
     }
@@ -53,9 +53,9 @@ export default class RowHeaderMatchCSV {
             mkdirSync(path, { recursive: true });
         }
 
-        const maxModels = this.maxModels || this.rowCount();
+        const maxRows = this.maxRows || this.rowCount();
 
-        for(let i = 0; i < this.rowCount(); i += maxModels) {
+        for(let i = 0; i < this.rowCount(); i += maxRows) {
             let csv = '"","",' +
                 Object.keys(this.columns).map(x => `"${x.replace(/"/g, '""')}"`) +
             '\n"","",' +
